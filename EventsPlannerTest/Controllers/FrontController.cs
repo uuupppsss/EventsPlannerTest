@@ -30,8 +30,8 @@ namespace EventsPlannerTest.Controllers
             return result;
         }
 
-        //Speakers/RegisterToEvent - Запрос Post на добавление нового участника. Принимает параметр: объект Speaker, параметр ответа:200
-        public void RegisterToEvent(Speaker speaker)
+        //Speakers/SetSpeakersToEvent - Запрос Post на добавление нового участника. Принимает параметр: объект Speaker, параметр ответа:200
+        public void SetSpeakersToEvent(Speaker speaker)
         {
             Speakers.Add(speaker);
         }

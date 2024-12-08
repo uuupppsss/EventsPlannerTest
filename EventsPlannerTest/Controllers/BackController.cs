@@ -101,7 +101,7 @@ namespace EventsPlannerTest.Controllers
             return result;
         }
 
-        //Equipment/GetEventEquipmentList - Запрос Get на получение списка оборудования для выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:List<EquipmentReservation>
+        //Equipment/GetEventEquipmentList - Запрос Get на получение списка оборудования для выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:List<Equipment>
         public List<Equipment> GetEventEquipmentList(int event_id)
         {
             List<Equipment> result = [];

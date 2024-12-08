@@ -106,7 +106,7 @@ namespace EventsPlannerTest.Tests
                 EventId = 3,
             };
 
-            Model.RegisterToEvent(speaker);
+            Model.SetSpeakersToEvent(speaker);
             Assert.That(Model.Speakers, Does.Contain(speaker));
         }
     }

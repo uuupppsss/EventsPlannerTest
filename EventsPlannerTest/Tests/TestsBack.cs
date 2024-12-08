@@ -109,17 +109,11 @@ namespace EventsPlannerTest.Tests
         [Test]
         public void RemoveEventTest()
         {
-            var eventToRemove = new Event()
-            {
-                Id = 3,
-                Name = "Выпускной",
-                Type = "Праздничное",
-                Date = new DateTime(2025 / 6 / 20),
-                PlaceId = 3,
-            };
+            var events = Model.GetEventsList();
+            var eventToRemove = events.FirstOrDefault(e => e.Id == 3);
 
             Model.RemoveEvent(eventToRemove.Id);
-            var events = Model.GetEventsList();
+            events = Model.GetEventsList();
             Assert.That(events, Does.Not.Contain(eventToRemove));
         }
 

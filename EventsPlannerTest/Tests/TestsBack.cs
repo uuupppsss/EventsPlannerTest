@@ -1,5 +1,6 @@
 ﻿using EventsPlannerTest.Controllers;
 using EventsPlannerTest.Model;
+using System.Numerics;
 
 namespace EventsPlannerTest.Tests
 {
@@ -208,15 +209,6 @@ namespace EventsPlannerTest.Tests
         }
 
         [Test]
-        public void GetAvailibleEquipmentsListTest()
-        {
-            var events = Model.GetEventsList();
-            var date = events.FirstOrDefault(e => e.Id == 1).Date;
-            var availible_equipments = Model.GetEquipmentsList(date);
-            Assert.AreEqual(availible_equipments.Count, 1);
-        }
-
-        [Test]
         public void UpdateEquipmentsListTest()
         {
             var equipments = new List<Equipment>()
@@ -252,6 +244,54 @@ namespace EventsPlannerTest.Tests
         {
             var equipments = Model.GetEquipmentsList();
             Assert.That(equipments.Count == 3);
+        }
+
+        [Test]
+        public void GetAvailibleEquipmentsListTest()
+        {
+            var events = Model.GetEventsList();
+            var date = events.FirstOrDefault(e => e.Id == 1).Date;
+            var availible_equipments = Model.GetEquipmentsList(date);
+            Assert.AreEqual(availible_equipments.Count, 1);
+        }
+
+        [Test]
+        public void GetPlacesListTest()
+        {
+            var equipments = Model.GetPlacesList();
+            Assert.That(equipments.Count == 3);
+        }
+
+        [Test]
+        public void GetAvailiblePlacesListTest()
+        {
+            var events = Model.GetEventsList();
+            var date = events.FirstOrDefault(e => e.Id == 1).Date;
+            var availible_equipments = Model.GetPlacesList(date);
+            Assert.AreEqual(availible_equipments.Count, 2);
+        }
+
+        [Test]
+        public void UpdatePlacesTest()
+        {
+            var places = new List<Place>()
+            {
+                new Place()
+                {
+                    Id=1,
+                    Name="Актовый зал"
+                },
+
+
+                new Place()
+                {
+                   Id=2,
+                   Name="Кабинет 100"
+                }
+            };
+
+            Model.UpdatePlacesList(places);
+            Assert.AreEqual(Model.Places.Count, 2);
         }
 
     }

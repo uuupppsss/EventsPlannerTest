@@ -13,6 +13,7 @@ namespace EventsPlannerTest.Controllers
         public List<Speaker> speakers;
         public List<EquipmentReservation> EquipmentReservations { get; set; }
         public List<Equipment> Equipments;
+        public List<Place> Places;
 
         public BackController(List<Event> _events, List<Speaker> _speakers, List<EquipmentReservation> _equipments)
         {
@@ -37,6 +38,27 @@ namespace EventsPlannerTest.Controllers
                     Id=3,
                     Name="Проектор"
                 }
+            };
+
+            Places = new List<Place>()
+            {
+                new Place()
+                {
+                    Id=1,
+                    Name="Актовый зал"
+                },
+
+                new Place()
+                {
+                    Id=2,
+                    Name="Кабинет 103"
+                },
+
+                new Place()
+                {
+                    Id=3,
+                    Name="Кабинет 100"
+                },
             };
         }
         //Events/GetEventsList - Запрос Get на получение списка мероприятий.  Принимает параметры:string? filtertype и DateTime? filterdate, параметр ответа: List<Event>
@@ -132,7 +154,7 @@ namespace EventsPlannerTest.Controllers
             Equipments=equipments_list;
         }
 
-        //Equipment/GetEventEquipmentList - Запрос Get на получение списка всего доступного оборудования. Ничего не принимает, параметр ответа:List<Equipment>
+        //Equipment/GetEquipmentsList - Запрос Get на получение списка всего доступного оборудования. Принимает параметр DateTime, параметр ответа:List<Equipment>
         public List<Equipment> GetEquipmentsList(DateTime? date=null)
         {
             List<Equipment> result = [.. Equipments];
@@ -147,5 +169,24 @@ namespace EventsPlannerTest.Controllers
             return result;
         }
 
+        //Place/GetPlacesList - Запрос Get на получение списка всего доступных мест. Принимает параметр DateTime, параметр ответа:List<Place>
+        public List<Place> GetPlacesList(DateTime? date = null)
+        {
+            List<Place> result = [.. Places];
+
+            if (date != null)
+            {
+                var reservedPlacesIds = events.Where(e => e.Date == date).Select(e => e.PlaceId).ToList();
+                result = result.Where(r => !reservedPlacesIds.Contains(r.Id)).ToList();
+            }
+
+            return result;
+        }
+
+        //Place/UpdatePlacesList - Запрос Post на обновление списка мест. Принимает параметр: List<Place>, параметр ответа:200
+        public void UpdatePlacesList(List<Place> places_list)
+        {
+            Places= places_list;
+        }
     }
 }

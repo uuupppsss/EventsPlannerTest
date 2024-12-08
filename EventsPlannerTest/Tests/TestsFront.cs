@@ -1,5 +1,6 @@
+using EventsPlannerTest.Controllers;
 using EventsPlannerTest.Model;
-namespace EventsPlannerTest
+namespace EventsPlannerTest.Tests
 {
     public class TestsFront
     {
@@ -45,6 +46,24 @@ namespace EventsPlannerTest
                     Date=new DateTime(2025/2/23),
                     PlaceId=3,
                 },
+            },
+            new List<Speaker>()
+            {
+                new Speaker()
+                {
+                    Id=1,
+                    UserId=1,
+                    Name="Тимур",
+                    EventId=1,
+                },
+
+                new Speaker()
+                {
+                    Id=2,
+                    UserId=1,
+                    Name="Олег",
+                    EventId=3,
+                },
             });
         }
 
@@ -52,29 +71,43 @@ namespace EventsPlannerTest
         public void GetFullEventsListTest()
         {
             List<Event> events = Model.GetEventsList();
-            Assert.That(events.Count, Is.EqualTo(4));
+            Assert.That(events, Has.Count.EqualTo(4));
         }
 
         [Test]
         public void GetFiltredByDateEventsListTest()
         {
-            List<Event> events = Model.GetFiltredByDateEvents(new DateTime(2025/2/23));
-            Assert.That(events.Count, Is.EqualTo(1));
+            List<Event> events = Model.GetEventsList(null,new DateTime(2025 / 2 / 23));
+            Assert.That(events, Has.Count.EqualTo(1));
         }
 
         [Test]
         public void GetFiltredByTypeEventsListTest()
         {
-            List<Event> events = Model.GetFiltredByTypeEvents("Праздничное");
-            Assert.That(events.Count, Is.EqualTo(2));
+            List<Event> events = Model.GetEventsList("Праздничное");
+            Assert.That(events, Has.Count.EqualTo(2));
         }
 
         [Test]
         public void GetFiltredByBothEventsListTest()
         {
-            List<Event> events = Model.GetFiltredByTypeEvents("Праздничное");
-            List<Event> events1 = Model.GetFiltredByDateEvents(new DateTime(2025 / 2 / 23), events);
-            Assert.That(events1.Count, Is.EqualTo(1));
+            List<Event> events = Model.GetEventsList("Праздничное", new DateTime(2025 / 2 / 23));
+            Assert.That(events, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void RegisterToEventTest()
+        {
+            Speaker speaker = new Speaker()
+            {
+                Id = 3,
+                UserId = 1,
+                Name = "Глубокослав",
+                EventId = 3,
+            };
+
+            Model.RegisterToEvent(speaker);
+            Assert.That(Model.Speakers, Does.Contain(speaker));
         }
     }
 }

@@ -21,7 +21,6 @@ namespace EventsPlannerTest.Model
         public int PlaceId { get; set; }
 
         //public virtual Place Place { get; set; }
-
         //public virtual ICollection<Speaker> Speakers { get; set; }
         //public virtual ICollection<Equipment> EquipmentCollection { get;set; }
     }

@@ -1,6 +1,7 @@
-﻿using EventsPlannerTest.Model;
+﻿using EventsPlannerTest.Controllers;
+using EventsPlannerTest.Model;
 
-namespace EventsPlannerTest
+namespace EventsPlannerTest.Tests
 {
     public class TestsBack
     {
@@ -51,13 +52,15 @@ namespace EventsPlannerTest
                 new Speaker()
                 {
                     Id=1,
+                    UserId=1,
                     Name="Тимур",
                     EventId=1,
                 },
 
-                new Speaker() 
+                new Speaker()
                 {
                     Id=2,
+                    UserId=1,
                     Name="Олег",
                     EventId=3,
                 },
@@ -76,7 +79,7 @@ namespace EventsPlannerTest
                     Name="Колонка",
                     EventId=1,
                 }
-            });
+            }) ;
 
         }
 
@@ -92,8 +95,8 @@ namespace EventsPlannerTest
                 PlaceId = 3
             };
             Model.AddEvent(eventToAdd);
-            var events=Model.GetEventsList();
-            Assert.That(events.Contains(eventToAdd));
+            var events = Model.GetEventsList();
+            Assert.That(events, Does.Contain(eventToAdd));
         }
 
         [Test]
@@ -107,9 +110,9 @@ namespace EventsPlannerTest
                 Date = new DateTime(2025 / 6 / 20),
                 PlaceId = 3,
             };
-            Model.RemoveEvent(eventToRemove);
+            Model.RemoveEvent(eventToRemove.Id);
             var events = Model.GetEventsList();
-            Assert.That(!events.Contains(eventToRemove));
+            Assert.That(events, Does.Not.Contain(eventToRemove));
         }
 
         [Test]
@@ -124,11 +127,11 @@ namespace EventsPlannerTest
                 Date = new DateTime(2025 / 6 / 20),
                 PlaceId = 4,
             };
-            var old_event=events.FirstOrDefault(e=>e.Id==eventToUpdate.Id);
+            var old_event = events.FirstOrDefault(e => e.Id == eventToUpdate.Id);
             Model.UpdateEvent(eventToUpdate);
             events.Clear();
             events = Model.GetEventsList();
-            Assert.That(events.Contains(eventToUpdate)&&!events.Contains(old_event));
+            Assert.That(events.Contains(eventToUpdate) && !events.Contains(old_event));
         }
 
         [Test]
@@ -137,14 +140,14 @@ namespace EventsPlannerTest
             int event_id = 2;
             var speaker = new Speaker()
             {
-                Id=3,
-                Name="Я",
-                EventId=event_id,
+                Id = 3,
+                Name = "Я",
+                EventId = event_id,
             };
 
             Model.SetSpeakersToEvent(speaker);
             var speakers = Model.GetEventSpeackersList(event_id);
-            Assert.That(speakers.Contains(speaker));
+            Assert.That(speakers, Does.Contain(speaker));
         }
 
         [Test]
@@ -158,9 +161,9 @@ namespace EventsPlannerTest
                 EventId = 1,
             };
 
-            Model.UnsetSpeakersToEvent(speaker);
+            Model.UnsetSpeakersToEvent(speaker.Id);
             var speakers = Model.GetEventSpeackersList(event_id);
-            Assert.That(!speakers.Contains(speaker));
+            Assert.That(speakers, Does.Not.Contain(speaker));
         }
 
         [Test]
@@ -174,8 +177,8 @@ namespace EventsPlannerTest
                 EventId = event_id
             };
             Model.ReservEquipmentToEvent(equipment);
-            var equipments=Model.GetEventEquipmentList(event_id);
-            Assert.That(equipments.Contains(equipment));
+            var equipments = Model.GetEventEquipmentList(event_id);
+            Assert.That(equipments, Does.Contain(equipment));
         }
 
         [Test]
@@ -184,13 +187,13 @@ namespace EventsPlannerTest
             int event_id = 2;
             var equipment = new Equipment()
             {
-                Id = 3,
-                Name = "Еще колонка",
-                EventId = event_id
+                Id = 2,
+                Name = "Колонка",
+                EventId = 1,
             };
-            Model.UnsetEquipmentToEvent(equipment);
+            Model.UnsetEquipmentToEvent(equipment.Id);
             var equipments = Model.GetEventEquipmentList(event_id);
-            Assert.That(!equipments.Contains(equipment));
+            Assert.That(equipments, Does.Not.Contain(equipment));
         }
     }
 }

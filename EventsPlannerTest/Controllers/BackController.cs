@@ -12,7 +12,7 @@ namespace EventsPlannerTest.Controllers
         private List<Event> events;
         public List<Speaker> speakers;
         public List<EquipmentReservation> EquipmentReservations { get; set; }
-        private List<Equipment> equipments;
+        public List<Equipment> Equipments;
 
         public BackController(List<Event> _events, List<Speaker> _speakers, List<EquipmentReservation> _equipments)
         {
@@ -20,7 +20,7 @@ namespace EventsPlannerTest.Controllers
             speakers = _speakers;
             EquipmentReservations = _equipments;
 
-            equipments = new List<Equipment>()
+            Equipments = new List<Equipment>()
             {
                 new Equipment()
                 {
@@ -72,13 +72,12 @@ namespace EventsPlannerTest.Controllers
         //Events/RemoveEvent - Запрос Delete на удаление мероприятия. Принимает параметр: int id, параметр ответа:200
         public void RemoveEvent(int id)
         {
+            speakers.RemoveAll(s => s.EventId == id);
+            EquipmentReservations.RemoveAll(s => s.EventId == id);
+
             Event eventToRemove = events.FirstOrDefault(e => e.Id == id);
             if (eventToRemove != null) events.Remove(eventToRemove);
-            foreach (var speaker in speakers)
-            {
-                if(speaker.EventId==id)
-                    speakers.Remove(speaker);
-            }
+
         }
 
         //Speakers/SetSpeakersToEvent - Запрос Post на добавление нового участника. Принимает параметр: объект Speaker, параметр ответа:200
@@ -108,7 +107,7 @@ namespace EventsPlannerTest.Controllers
             var reservations=EquipmentReservations.Where(s => s.EventId == event_id).ToList();
             foreach (var reservation in reservations)
             {
-                var equipment = equipments.FirstOrDefault(e => e.Id == reservation.EquipmentId);
+                var equipment = Equipments.FirstOrDefault(e => e.Id == reservation.EquipmentId);
                 result.Add(equipment);
             }
             return result;
@@ -125,6 +124,19 @@ namespace EventsPlannerTest.Controllers
         {
             var equipment = EquipmentReservations.FirstOrDefault(e => e.Id == id);
             if (equipment != null) EquipmentReservations.Remove(equipment);
+        }
+
+        //Equipment/UpdateEquipmentsList - Запрос Post на обновление списка оборудования. Принимает параметр: List<Equipment>, параметр ответа:200
+        public void UpdateEquipmentsList(List<Equipment> equipments_list)
+        {
+            Equipments=equipments_list;
+        }
+
+        //Equipment/GetEventEquipmentList - Запрос Get на получение списка доступного оборудования. Ничего не принимает, параметр ответа:List<Equipment>
+        public List<Equipment> GetEquipmentsList()
+        {
+            List<Equipment> result = [.. Equipments];
+            return result;
         }
     }
 }

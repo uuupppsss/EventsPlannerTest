@@ -77,5 +77,15 @@ namespace EventsPlannerTest.Tests
             Assert.That(created_user.Name == user.Name && created_user.Email == user.Email &&
                 created_user.Password == user.Password && created_user.Role == "user");
         }
+
+        [Test]
+        public void DeleteUserTest()
+        {
+            var users = Model.GetUsersList();
+            var user_to_delete = users.FirstOrDefault(u => u.Id == 2);
+            Model.DeleteUser(user_to_delete.Id);
+            users = Model.GetUsersList();
+            Assert.That(!users.Contains(user_to_delete));
+        }
     }
 }

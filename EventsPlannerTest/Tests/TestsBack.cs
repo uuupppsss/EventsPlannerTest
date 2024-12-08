@@ -111,10 +111,14 @@ namespace EventsPlannerTest.Tests
         {
             var events = Model.GetEventsList();
             var eventToRemove = events.FirstOrDefault(e => e.Id == 3);
-
             Model.RemoveEvent(eventToRemove.Id);
             events = Model.GetEventsList();
-            Assert.That(events, Does.Not.Contain(eventToRemove));
+
+            var event_speakers = Model.GetEventSpeackersList(eventToRemove.Id);
+            var event_equipment = Model.GetEventEquipmentList(eventToRemove.Id);
+
+            Assert.That(!events.Contains(eventToRemove)
+                && event_speakers.Count==0&&event_equipment.Count==0);
         }
 
         [Test]
@@ -202,6 +206,43 @@ namespace EventsPlannerTest.Tests
             var equipments=Model.GetEventEquipmentList(event_id);
             Assert.AreEqual(2, equipments.Count);
         }
-        
+
+        [Test]
+        public void UpdateEquipmentsListTest()
+        {
+            var equipments = new List<Equipment>()
+            {
+                new Equipment()
+                {
+                    Id=1,
+                    Name="Микрофон"
+                },
+                new Equipment()
+                {
+                    Id=2,
+                    Name="Колонка"
+                },
+                new Equipment()
+                {
+                    Id=3,
+                    Name="Проектор"
+                },
+                new Equipment()
+                {
+                    Id=4,
+                    Name="Колонка2"
+                }
+            };
+
+            Model.UpdateEquipmentsList(equipments);
+            Assert.That(Model.Equipments.Count==4);
+        }
+
+        [Test]
+        public void GetEquipmentsListTest()
+        {
+            var equipments = Model.GetEquipmentsList();
+            Assert.That(equipments.Count == 3);
+        }
     }
 }

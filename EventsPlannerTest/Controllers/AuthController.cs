@@ -38,5 +38,12 @@ namespace EventsPlannerTest.Controllers
             user.Role = "user";
             users.Add(user);
         }
+
+        //Users/DeleteUser - Запрос Delete для удаления пользователя. Принимает параметр: int id, параметр ответа: 200
+        public void DeleteUser(int id)
+        {
+            var user= users.FirstOrDefault(u=>u.Id==id);
+            if(user!=null) users.Remove(user);
+        }
     }
 }

@@ -208,6 +208,15 @@ namespace EventsPlannerTest.Tests
         }
 
         [Test]
+        public void GetAvailibleEquipmentsListTest()
+        {
+            var events = Model.GetEventsList();
+            var date = events.FirstOrDefault(e => e.Id == 1).Date;
+            var availible_equipments = Model.GetEquipmentsList(date);
+            Assert.AreEqual(availible_equipments.Count, 1);
+        }
+
+        [Test]
         public void UpdateEquipmentsListTest()
         {
             var equipments = new List<Equipment>()
@@ -244,5 +253,6 @@ namespace EventsPlannerTest.Tests
             var equipments = Model.GetEquipmentsList();
             Assert.That(equipments.Count == 3);
         }
+
     }
 }

@@ -132,11 +132,20 @@ namespace EventsPlannerTest.Controllers
             Equipments=equipments_list;
         }
 
-        //Equipment/GetEventEquipmentList - Запрос Get на получение списка доступного оборудования. Ничего не принимает, параметр ответа:List<Equipment>
-        public List<Equipment> GetEquipmentsList()
+        //Equipment/GetEventEquipmentList - Запрос Get на получение списка всего доступного оборудования. Ничего не принимает, параметр ответа:List<Equipment>
+        public List<Equipment> GetEquipmentsList(DateTime? date=null)
         {
             List<Equipment> result = [.. Equipments];
+
+            if (date != null)
+            {
+                var thisdate_eventsIds = events.Where(e => e.Date == date).Select(e=>e.Id).ToList();
+                var reservedEquipmentIds = EquipmentReservations.Where(r => thisdate_eventsIds.Contains(r.EventId)).Select(r=>r.EquipmentId).ToList();
+                result=result.Where(r=>!reservedEquipmentIds.Contains(r.Id)).ToList();
+            }
+
             return result;
         }
+
     }
 }

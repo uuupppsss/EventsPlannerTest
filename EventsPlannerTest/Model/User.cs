@@ -14,9 +14,9 @@ namespace EventsPlannerTest.Model
         public string Email { get; set; }
         public string Role { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Id} {Name} {Password} {Email} {Role}";
-        }
+        //public override string ToString()
+        //{
+        //    return $"{Id} {Name} {Password} {Email} {Role}";
+        //}
     }
 }

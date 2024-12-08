@@ -10,14 +10,34 @@ namespace EventsPlannerTest.Controllers
     public class BackController
     {
         private List<Event> events;
-        private List<Speaker> speakers;
+        public List<Speaker> speakers;
+        public List<EquipmentReservation> EquipmentReservations { get; set; }
         private List<Equipment> equipments;
 
-        public BackController(List<Event> _events, List<Speaker> _speakers, List<Equipment> _equipments)
+        public BackController(List<Event> _events, List<Speaker> _speakers, List<EquipmentReservation> _equipments)
         {
             events = _events;
             speakers = _speakers;
-            equipments = _equipments;
+            EquipmentReservations = _equipments;
+
+            equipments = new List<Equipment>()
+            {
+                new Equipment()
+                {
+                    Id=1,
+                    Name="Микрофон"
+                },
+                new Equipment()
+                {
+                    Id=2,
+                    Name="Колонка"
+                },
+                new Equipment()
+                {
+                    Id=3,
+                    Name="Проектор"
+                }
+            };
         }
         //Events/GetEventsList - Запрос Get на получение списка мероприятий.  Принимает параметры:string? filtertype и DateTime? filterdate, параметр ответа: List<Event>
         public List<Event> GetEventsList(string? filtertype = null, DateTime? filterdate = null)
@@ -54,6 +74,11 @@ namespace EventsPlannerTest.Controllers
         {
             Event eventToRemove = events.FirstOrDefault(e => e.Id == id);
             if (eventToRemove != null) events.Remove(eventToRemove);
+            foreach (var speaker in speakers)
+            {
+                if(speaker.EventId==id)
+                    speakers.Remove(speaker);
+            }
         }
 
         //Speakers/SetSpeakersToEvent - Запрос Post на добавление нового участника. Принимает параметр: объект Speaker, параметр ответа:200
@@ -69,31 +94,37 @@ namespace EventsPlannerTest.Controllers
             if (speaker != null) speakers.Remove(speaker);
         }
 
-        //Speakers/GetEventSpeackersList - Запрос Get на получение списка участников выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:200
+        //Speakers/GetEventSpeackersList - Запрос Get на получение списка участников выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:List<Speaker>
         public List<Speaker> GetEventSpeackersList(int event_id)
         {
             List<Speaker> result = speakers.Where(s => s.EventId == event_id).ToList();
             return result;
         }
 
-        //Equipment/GetEventEquipmentList - Запрос Get на получение списка оборудования для выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:200
+        //Equipment/GetEventEquipmentList - Запрос Get на получение списка оборудования для выбранного мероприятия. Принимает параметр: int event_id, параметр ответа:List<EquipmentReservation>
         public List<Equipment> GetEventEquipmentList(int event_id)
         {
-            List<Equipment> result = equipments.Where(s => s.EventId == event_id).ToList();
+            List<Equipment> result = [];
+            var reservations=EquipmentReservations.Where(s => s.EventId == event_id).ToList();
+            foreach (var reservation in reservations)
+            {
+                var equipment = equipments.FirstOrDefault(e => e.Id == reservation.EquipmentId);
+                result.Add(equipment);
+            }
             return result;
         }
 
         //Equipment/ReservEquipmentToEvent - Запрос Post на резервирование нового оборудования. Принимает параметр: объект Equipment, параметр ответа:200
-        public void ReservEquipmentToEvent(Equipment equipment)
+        public void ReservEquipmentToEvent(EquipmentReservation equipment)
         {
-            equipments.Add(equipment);
+            EquipmentReservations.Add(equipment);
         }
 
         //Equipment/UnsetEquipmentToEvent - Запрос Delete на удаление брони оборудования. Принимает параметр: int id, параметр ответа:200
         public void UnsetEquipmentToEvent(int id)
         {
-            Equipment equipment = equipments.FirstOrDefault(e => e.Id == id);
-            if (equipment != null) equipments.Remove(equipment);
+            var equipment = EquipmentReservations.FirstOrDefault(e => e.Id == id);
+            if (equipment != null) EquipmentReservations.Remove(equipment);
         }
     }
 }

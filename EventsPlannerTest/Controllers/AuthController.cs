@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EventsPlannerTest.Controllers
@@ -13,7 +14,7 @@ namespace EventsPlannerTest.Controllers
 
         public AuthController(List<User> _users)
         {
-            users = _users;
+            users= _users;
         }
 
         //Users/GetUsersList - Запрос для получения списка пользователей. Ничего не принимает, параметр ответа: List<User>

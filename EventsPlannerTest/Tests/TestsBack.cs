@@ -65,21 +65,28 @@ namespace EventsPlannerTest.Tests
                     EventId=3,
                 },
             },
-            new List<Equipment>()
+            new List<EquipmentReservation>()
             {
-                new Equipment()
+                new EquipmentReservation()
                 {
                     Id=1,
-                    Name="Микрофон",
+                    EquipmentId=1,
                     EventId=1,
                 },
-                new Equipment()
+                new EquipmentReservation()
                 {
                     Id=2,
-                    Name="Колонка",
+                    EquipmentId = 2,
                     EventId=1,
+                },
+
+                new EquipmentReservation()
+                {
+                    Id=2,
+                    EquipmentId = 2,
+                    EventId=3,
                 }
-            }) ;
+            });
 
         }
 
@@ -110,6 +117,7 @@ namespace EventsPlannerTest.Tests
                 Date = new DateTime(2025 / 6 / 20),
                 PlaceId = 3,
             };
+
             Model.RemoveEvent(eventToRemove.Id);
             var events = Model.GetEventsList();
             Assert.That(events, Does.Not.Contain(eventToRemove));
@@ -169,31 +177,37 @@ namespace EventsPlannerTest.Tests
         [Test]
         public void ReservEquipmentToEventTest()
         {
-            int event_id = 2;
-            var equipment = new Equipment()
+            var equipment = new EquipmentReservation()
             {
                 Id = 3,
-                Name = "Еще колонка",
-                EventId = event_id
+                EquipmentId = 2,
+                EventId = 2
             };
             Model.ReservEquipmentToEvent(equipment);
-            var equipments = Model.GetEventEquipmentList(event_id);
-            Assert.That(equipments, Does.Contain(equipment));
+            
+            Assert.That(Model.EquipmentReservations, Does.Contain(equipment));
         }
 
         [Test]
         public void UnsetEquipmentToEventTest()
         {
-            int event_id = 2;
-            var equipment = new Equipment()
+            var equipment = new EquipmentReservation()
             {
-                Id = 2,
-                Name = "Колонка",
+                Id = 1,
+                EquipmentId = 1,
                 EventId = 1,
             };
             Model.UnsetEquipmentToEvent(equipment.Id);
-            var equipments = Model.GetEventEquipmentList(event_id);
-            Assert.That(equipments, Does.Not.Contain(equipment));
+            Assert.That(Model.EquipmentReservations, Does.Not.Contain(equipment));
         }
+
+        [Test]
+        public void GetEventEquipmentListTest()
+        {
+            int event_id = 1;
+            var equipments=Model.GetEventEquipmentList(event_id);
+            Assert.AreEqual(2, equipments.Count);
+        }
+        
     }
 }

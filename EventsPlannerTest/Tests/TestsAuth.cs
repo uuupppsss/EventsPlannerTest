@@ -11,6 +11,7 @@ namespace EventsPlannerTest.Tests
     public class TestsAuth
     {
         AuthController Model;
+
         [SetUp]
         public void SetUp()
         {
@@ -32,7 +33,7 @@ namespace EventsPlannerTest.Tests
                     Email="user@user.com",
                     Password="user",
                     Role="user"
-                },
+                }
             });
         }
         [Test]
